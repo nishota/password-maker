@@ -1,1 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
+/*
+Nikukyu (Japanese)
+https://fonts.google.com/earlyaccess
+SIL OPEN FONT LICENSE Version 1.1 - 26 February 2007
+http://fonts.gstatic.com/ea/nikukyu/v1/OFL.txt
+*/
+@font-face {
+    font-family: "Nikukyu";
+    src: url("assets/Nikukyu-Regular.ttf")
+}
+.wf-nikukyu { font-family: "Nikukyu"; }
