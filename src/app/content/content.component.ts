@@ -11,7 +11,6 @@ export class ContentComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    const test = new PasswordMakerCore(true, true, true);
   }
 
 }

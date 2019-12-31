@@ -1,6 +1,6 @@
 export class PasswordMakerCore {
     private readonly characters = 'abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    private readonly seed = '';
+    private seed = '';
 
     constructor(hasOmoji: boolean, hasKomoji: boolean, hasSuji: boolean) {
         let temp = this.characters;
@@ -14,20 +14,14 @@ export class PasswordMakerCore {
         if (!hasSuji) {
             temp = temp.replace(/[0-9]+/, '');
         }
-
-        let allLength = temp.length;
-        console.log(allLength);
-        console.log(temp);
-        // Charactersを混ぜる
-        while (allLength) {
-            const i = Math.floor(Math.random() * allLength);
-            this.seed += temp[i];
-            temp.slice(i);
-            console.log(temp);
-            console.log(this.seed);
-            allLength--;
-        }
-        console.log(this.seed);
+        // TODO Charactersを混ぜたい
+        // let allLength = temp.length;
+        // while (allLength) {
+        //     const i = Math.floor(Math.random() * allLength);
+        //     this.seed += temp[i];
+        //     allLength--;
+        // }
+        this.seed = temp;
     }
 
     public Generate(num: number): string {
