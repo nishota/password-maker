@@ -1,23 +1,23 @@
 export class PasswordMakerCore {
-    private readonly characters = 'abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%&()';
-    private readonly seeds = '';
+    private readonly characters = 'abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    private readonly seed = '';
 
     constructor() {
         const temp = this.characters;
         let allLength = this.characters.length;
-        // オプションによって残す文字を変える
+        // TODO オプションによって残す文字を変える
 
         // Charactersを混ぜる
         while (allLength) {
             const i = Math.floor(Math.random() * allLength);
-            this.seeds += temp[i];
+            this.seed += temp[i];
             temp.slice(i);
             allLength--;
         }
     }
 
     public Generate(): string {
-        return this.seeds.charAt(Math.floor(Math.random() * this.seeds.length));
+        return this.seed.charAt(Math.floor(Math.random() * this.seed.length));
     }
 
 }
