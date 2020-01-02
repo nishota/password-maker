@@ -27,12 +27,22 @@ export class PasswordMakerCore {
         this.seed = temp;
     }
 
-    public Generate(num: number): string {
+    public Generate(num: number, hasDuplication: boolean): string {
         let result = '';
         let roop = num;
+        const tempArr = [];
         while (roop) {
-            result += this.seed.charAt(Math.floor(Math.random() * this.seed.length));
-            roop--;
+            const char = this.seed.charAt(Math.floor(Math.random() * this.seed.length));
+            if (!hasDuplication) {
+                if (!tempArr.includes(char)) {
+                    result += char;
+                    tempArr.push(char);
+                    roop--;
+                }
+            } else {
+                result += char;
+                roop--;
+            }
         }
         return result;
     }

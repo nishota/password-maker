@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
+import { FormBuilder, Validators, FormArray, FormControl, FormGroup } from '@angular/forms';
 import { PasswordMakerCore } from '../core/password-maker.core';
 import { PasswordSaverService } from '../password-saver.service';
 
@@ -10,19 +10,24 @@ import { PasswordSaverService } from '../password-saver.service';
 })
 export class PasswordMakerComponent implements OnInit {
   charTypeArr = ['omoji', 'komoji', 'suji'];
-  optionArr = ['option1'];
+  optionArr = ['option1', 'option2'];
 
-  setting = this.form.group(
-    {
-      charNumber: ['8'],
-      charType: this.form.array([]),
-      optionType: this.form.array([]),
-      number: ['3', [Validators.required, Validators.max(100), Validators.min(1)]]
-    });
+  setting: FormGroup;
 
   constructor(private form: FormBuilder, private ps: PasswordSaverService) { }
 
   ngOnInit(): void {
+    this.init();
+  }
+
+  init(): void {
+    this.setting = this.form.group(
+      {
+        charNumber: ['8'],
+        charType: this.form.array([]),
+        optionType: this.form.array([]),
+        number: ['6', [Validators.required, Validators.max(100), Validators.min(1)]]
+      });
     const formType1 = this.setting.controls.charType as FormArray;
     const formType2 = this.setting.controls.optionType as FormArray;
     this.charTypeArr.forEach(x => formType1.push(new FormControl(x)));
@@ -47,26 +52,24 @@ export class PasswordMakerComponent implements OnInit {
     }
     const optionArr = this.setting.get('optionType').value;
     let hasSameChar = true;
+    let hasDuplication = true;
     if (optionArr.includes('option1')) {
       hasSameChar = false;
+    }
+    if (optionArr.includes('option2')) {
+      hasDuplication = false;
     }
 
     const charNumber = Number(this.setting.get('charNumber').value);
     const passNumber = Number(this.setting.get('number').value);
     const password = new PasswordMakerCore(hasOmoji, hasKomoji, hasSuji, hasSameChar);
     for (const _ of Array(passNumber)) {
-      this.ps.passwords.push(password.Generate(charNumber));
+      this.ps.passwords.push(password.Generate(charNumber, hasDuplication));
     }
   }
 
   reset(): void {
-    this.setting = this.form.group(
-      {
-        charNumber: ['8'],
-        charType: this.form.array([]),
-        optionType: this.form.array([]),
-        number: ['3', [Validators.required, Validators.max(100), Validators.min(1)]]
-      });
+    this.init();
   }
 
   checkType(charType: string, isChecked: boolean) {
