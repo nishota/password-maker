@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { PasswordMakerCore } from '../core/password-maker.core';
 import { PasswordSaverService } from '../password-saver.service';
 
@@ -12,9 +12,7 @@ export class PasswordMakerComponent implements OnInit {
   setting = this.form.group(
     {
       charNumber: ['8'],
-      omoji: ['true'],
-      komoji: ['true'],
-      suji: ['true'],
+      charType: this.form.array([]),
       number: ['3', [Validators.required, Validators.max(100), Validators.min(1)]]
     });
 
@@ -26,14 +24,24 @@ export class PasswordMakerComponent implements OnInit {
   generate(): void {
     this.ps.passwords.length = 0;
 
-    const hasOmoji = this.setting.get('omoji').value === 'true' ? true : false;
-    const hasKomoji = this.setting.get('komoji').value === 'true' ? true : false;
-    const hasSuji = this.setting.get('suji').value === 'true' ? true : false;
+    const array = this.setting.get('charType').value;
+    let hasOmoji = false;
+    let hasKomoji = false;
+    let hasSuji = false;
+    if (array.includes('omoji')) {
+      hasOmoji = true;
+    }
+    if (array.includes('komoji')) {
+      hasKomoji = true;
+    }
+    if (array.includes('suji')) {
+      hasSuji = true;
+    }
 
     const charNumber = Number(this.setting.get('charNumber').value);
     const passNumber = Number(this.setting.get('number').value);
     const password = new PasswordMakerCore(hasOmoji, hasKomoji, hasSuji);
-    for (const key of Array(passNumber)) {
+    for (const _ of Array(passNumber)) {
       this.ps.passwords.push(password.Generate(charNumber));
     }
   }
@@ -42,11 +50,18 @@ export class PasswordMakerComponent implements OnInit {
     this.setting = this.form.group(
       {
         charNumber: ['8'],
-        omoji: ['true'],
-        komoji: ['true'],
-        suji: ['true'],
+        charType: this.form.array([]),
         number: ['3', [Validators.required, Validators.max(100), Validators.min(1)]]
       });
   }
 
+  onChange(charType: string, isChecked: boolean) {
+    const formType = this.setting.controls.charType as FormArray;
+    if (isChecked) {
+      formType.push(new FormControl(charType));
+    } else {
+      const index = formType.controls.findIndex(x => x.value === charType);
+      formType.removeAt(index);
+    }
+  }
 }
