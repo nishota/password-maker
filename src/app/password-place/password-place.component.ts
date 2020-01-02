@@ -7,7 +7,6 @@ import { PasswordSaverService } from '../password-saver.service';
   styleUrls: ['./password-place.component.scss']
 })
 export class PasswordPlaceComponent implements OnInit {
-
   passwords: string[];
   constructor(private ps: PasswordSaverService) {
     this.passwords = this.ps.passwords;
@@ -16,20 +15,21 @@ export class PasswordPlaceComponent implements OnInit {
   ngOnInit() {
   }
 
+  public get disabled(): boolean {
+    return this.passwords.length === 0;
+  }
+
   select(target: any) {
     target.select();
     document.execCommand('copy');
   }
 
   // TODO ファイルダウンロード
-  download() {
-  //   const content = this.passwords.join('\r\c');
-  //   const blob = new Blob(this.passwords, { type: 'text/plain' });
-  //   window.URL = window.URL;
-  //   const link = $('<a></a>');
-  //   link.attr('href', window.URL.createObjectURL(blob));
-  //   link.attr('download', 'passoword.txt');
-  //   console.log(link);
-  //   link.trigger('click');
+  download(target: any) {
+    const pass = this.passwords.join('\r');
+    target.href = URL.createObjectURL(
+      new Blob([pass], {
+      type: 'text/plain'
+    }));
   }
 }
