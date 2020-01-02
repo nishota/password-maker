@@ -11,8 +11,8 @@ import { PasswordSaverService } from '../password-saver.service';
 export class PasswordMakerComponent implements OnInit {
   charTypeArr = ['omoji', 'komoji', 'suji'];
   optionArr = ['option1', 'option2'];
-
   setting: FormGroup;
+  private buttonDisabled = false;
 
   constructor(private form: FormBuilder, private ps: PasswordSaverService) { }
 
@@ -36,29 +36,13 @@ export class PasswordMakerComponent implements OnInit {
 
   generate(): void {
     this.ps.passwords.length = 0;
-
     const array = this.setting.get('charType').value;
-    let hasOmoji = false;
-    let hasKomoji = false;
-    let hasSuji = false;
-    if (array.includes('omoji')) {
-      hasOmoji = true;
-    }
-    if (array.includes('komoji')) {
-      hasKomoji = true;
-    }
-    if (array.includes('suji')) {
-      hasSuji = true;
-    }
+    const hasOmoji = array.includes('omoji') ? true : false;
+    const hasKomoji = array.includes('komoji') ? true : false;
+    const hasSuji = array.includes('suji') ? true : false;
     const optionArr = this.setting.get('optionType').value;
-    let hasSameChar = true;
-    let hasDuplication = true;
-    if (optionArr.includes('option1')) {
-      hasSameChar = false;
-    }
-    if (optionArr.includes('option2')) {
-      hasDuplication = false;
-    }
+    const hasSameChar = !optionArr.includes('option1') ? true : false;
+    const hasDuplication = !optionArr.includes('option2') ? true : false;
 
     const charNumber = Number(this.setting.get('charNumber').value);
     const passNumber = Number(this.setting.get('number').value);
@@ -69,12 +53,14 @@ export class PasswordMakerComponent implements OnInit {
   }
 
   reset(): void {
-    this.init();
+    // this.init();
+    window.location.reload();
   }
 
   checkType(charType: string, isChecked: boolean) {
     const formType = this.setting.controls.charType as FormArray;
     this.check(charType, isChecked, formType);
+    this.buttonDisabled = this.setting.get('charType').value.length === 0;
   }
   checkOption(optionType: string, isChecked: boolean) {
     const formType = this.setting.controls.optionType as FormArray;
