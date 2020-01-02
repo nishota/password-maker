@@ -9,7 +9,7 @@ import { PasswordSaverService } from '../password-saver.service';
   styleUrls: ['./password-maker.component.scss']
 })
 export class PasswordMakerComponent implements OnInit {
-  charTypeArr = ['omoji', 'komoji', 'suji'];
+  charTypeArr = ['omoji', 'komoji', 'suji', 'kigo'];
   optionArr = ['option1', 'option2'];
   setting: FormGroup;
   buttonDisabled = false;
@@ -40,13 +40,14 @@ export class PasswordMakerComponent implements OnInit {
     const hasOmoji = array.includes('omoji') ? true : false;
     const hasKomoji = array.includes('komoji') ? true : false;
     const hasSuji = array.includes('suji') ? true : false;
+    const hasKigo = array.includes('kigo') ? true : false;
     const optionArr = this.setting.get('optionType').value;
     const hasSameChar = !optionArr.includes('option1') ? true : false;
     const hasDuplication = !optionArr.includes('option2') ? true : false;
 
     const charNumber = Number(this.setting.get('charNumber').value);
     const passNumber = Number(this.setting.get('number').value);
-    const password = new PasswordMakerCore(hasOmoji, hasKomoji, hasSuji, hasSameChar);
+    const password = new PasswordMakerCore(hasOmoji, hasKomoji, hasSuji, hasKigo, hasSameChar);
     for (const _ of Array(passNumber)) {
       this.ps.passwords.push(password.Generate(charNumber, hasDuplication));
     }
@@ -61,6 +62,7 @@ export class PasswordMakerComponent implements OnInit {
     const formType = this.setting.controls.charType as FormArray;
     this.check(charType, isChecked, formType);
     this.buttonDisabled = this.setting.get('charType').value.length === 0;
+    console.log(isChecked);
   }
   checkOption(optionType: string, isChecked: boolean) {
     const formType = this.setting.controls.optionType as FormArray;

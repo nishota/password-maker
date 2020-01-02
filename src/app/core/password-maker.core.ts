@@ -1,8 +1,9 @@
 export class PasswordMakerCore {
     private readonly characters = 'abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    private readonly kigo = '!#$%&*+-=()^_~/';
     private seed = '';
 
-    constructor(hasOmoji: boolean, hasKomoji: boolean, hasSuji: boolean, hasSameChar: boolean) {
+    constructor(hasOmoji: boolean, hasKomoji: boolean, hasSuji: boolean, hasKigo: boolean, hasSameChar: boolean) {
         let temp = this.characters;
         // TODO オプションによって残す文字を変える
         if (!hasOmoji) {
@@ -16,6 +17,9 @@ export class PasswordMakerCore {
         }
         if (!hasSameChar) {
             temp = temp.replace(/[IJl1jiOo0]+/g, '');
+        }
+        if (hasKigo) {
+            temp += this.kigo;
         }
         // TODO Charactersを混ぜたい
         // let allLength = temp.length;
