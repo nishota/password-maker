@@ -12,7 +12,7 @@ export class PasswordMakerComponent implements OnInit {
   charTypeArr = ['omoji', 'komoji', 'suji'];
   optionArr = ['option1', 'option2'];
   setting: FormGroup;
-  private buttonDisabled = false;
+  buttonDisabled = false;
 
   constructor(private form: FormBuilder, private ps: PasswordSaverService) { }
 
