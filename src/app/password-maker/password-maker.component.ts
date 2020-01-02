@@ -26,7 +26,7 @@ export class PasswordMakerComponent implements OnInit {
         charNumber: ['8'],
         charType: this.form.array([]),
         optionType: this.form.array([]),
-        number: ['6', [Validators.required, Validators.max(100), Validators.min(1)]]
+        number: ['6', [Validators.required, Validators.pattern('[0-9]*'), Validators.max(100), Validators.min(1)]]
       });
     const formType1 = this.setting.controls.charType as FormArray;
     const formType2 = this.setting.controls.optionType as FormArray;
