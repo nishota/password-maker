@@ -5,7 +5,7 @@ export class PasswordMakerCore {
 
     constructor(hasOmoji: boolean, hasKomoji: boolean, hasSuji: boolean, hasKigo: boolean, hasSameChar: boolean) {
         let temp = this.characters;
-        // TODO オプションによって残す文字を変える
+        // オプションによって残す文字を変える
         if (!hasOmoji) {
             temp = temp.replace(/[A-Z]+/, '');
         }

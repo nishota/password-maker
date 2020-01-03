@@ -9,8 +9,10 @@ import { PasswordSaverService } from '../password-saver.service';
   styleUrls: ['./password-maker.component.scss']
 })
 export class PasswordMakerComponent implements OnInit {
-  charTypeArr = ['omoji', 'komoji', 'suji', 'kigo'];
-  optionArr = ['option1', 'option2'];
+  // 初期オプション
+  // 初期値をtrueにしたい場合、配列に追加する
+  private charTypeArr = ['omoji', 'komoji', 'suji', ''];
+  private optionArr = ['', ''];
   setting: FormGroup;
   buttonDisabled = false;
 
@@ -31,7 +33,7 @@ export class PasswordMakerComponent implements OnInit {
     const formType1 = this.setting.controls.charType as FormArray;
     const formType2 = this.setting.controls.optionType as FormArray;
     this.charTypeArr.forEach(x => formType1.push(new FormControl(x)));
-    this.charTypeArr.forEach(x => formType2.push(new FormControl(x)));
+    this.optionArr.forEach(x => formType2.push(new FormControl(x)));
   }
 
   generate(): void {
@@ -61,8 +63,7 @@ export class PasswordMakerComponent implements OnInit {
   checkType(charType: string, isChecked: boolean) {
     const formType = this.setting.controls.charType as FormArray;
     this.check(charType, isChecked, formType);
-    this.buttonDisabled = this.setting.get('charType').value.length === 0;
-    console.log(isChecked);
+    this.buttonDisabled = formType.controls.length === 0;
   }
   checkOption(optionType: string, isChecked: boolean) {
     const formType = this.setting.controls.optionType as FormArray;
@@ -74,7 +75,7 @@ export class PasswordMakerComponent implements OnInit {
       formType.push(new FormControl(type));
     } else {
       const index = formType.controls.findIndex(x => x.value === type);
-      formType.removeAt(index);
+      formType.removeAt(index); // kigoだけここでなぜかremoveできてない
     }
   }
 }
